@@ -7,21 +7,37 @@ with open('GPTkey', 'r') as file:
 openai.api_key = OpenAiKey
 
 #send and recieve from API
-def chat_with_gpt(prompt):
+def chat_with_gpt(messages):
     response = openai.ChatCompletion.create(
-        model = "gpt-3.5",
-        messages = [{"role": "user", "content": prompt}]
-        )
+        model="gpt-3.5-turbo",  
+        messages=messages       #send full conversation history
+    )
     
     #return reply
-    return response.choices[0].message.context.strip()
+    return response['choices'][0]['message']['content'].strip()
 
-#
-if __name__=="__main__":
+if __name__ == "__main__":
+    #start the conversation with a "system" message (sets chatbot behavior)
+    messages = [{"role": "system", "content": "You are a helpful chatbot."}]
+    
+    #main loop for chatting
     while True:
+        #get input
         user_input = input("You: ")
-        if user_input.lower() in ["quit", "exit", "bye"]:
-            break
         
-        response = chat_with_gpt(user_input)
-        print("Chatbot: ", response)
+        #if exit clause
+        if user_input.lower() in ["quit", "exit", "bye"]:
+            print("Chatbot: Goodbye!")
+            break
+
+        # Add the user's message to the conversation
+        messages.append({"role": "user", "content": user_input})
+
+        # Get the chatbot's response
+        response = chat_with_gpt(messages)
+
+        # Add the chatbot's reply to the conversation
+        messages.append({"role": "assistant", "content": response})
+
+        # Print the chatbot's reply
+        print("Chatbot:", response)
