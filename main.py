@@ -1,7 +1,7 @@
 import openai
 
 #import key
-with open('GPTkey', 'r') as file:
+with open('GPTkey.txt', 'r') as file:
     OpenAiKey = file.read().strip()
 
 openai.api_key = OpenAiKey
@@ -30,14 +30,14 @@ if __name__ == "__main__":
             print("Chatbot: Goodbye!")
             break
 
-        # Add the user's message to the conversation
+        #add the user's message to the conversation
         messages.append({"role": "user", "content": user_input})
 
-        # Get the chatbot's response
+        #get the chatbot's response
         response = chat_with_gpt(messages)
 
-        # Add the chatbot's reply to the conversation
+        #add the chatbot's reply to the conversation
         messages.append({"role": "assistant", "content": response})
 
-        # Print the chatbot's reply
+        #print the chatbot's reply
         print("Chatbot:", response)
